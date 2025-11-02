@@ -1,0 +1,41 @@
+services:
+  # webserver:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   env_file: ./.env
+  #   ports:
+  #     - "8081:8080"
+  #   environment:
+  #     - POSTGRES_HOST=dwpostgres
+  #   # volumes:
+  #     # - ./dags:/usr/local/airflow/dags
+  #     # - ./dbt_prontocardio:/usr/local/airflow/dbt
+  #     # - ./include/oracle:/usr/local/airflow/.oracle/instantclient_19_23/
+  #     # - ./include/postgresql:/usr/local/airflow/.postgresql/data/instantclient_17_0/
+  #   healthcheck:
+  #     test: ["CMD", "curl", "http://localhost:8080/health"]
+  #     interval: 30s
+  #     timeout: 30s
+  #     retries: 5
+
+  dwpostgres:
+    image: postgres:17rc1-alpine3.19
+    restart: unless-stopped
+    container_name: dbt_postgres
+    env_file: ./.env
+    ports:
+      - "5447:5432"
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    # depends_on:
+    #   - webserver
+    networks:
+      - airflow
+
+volumes:
+  postgres-volume:
+
+networks:
+  airflow:
+    driver: bridge
