@@ -38,4 +38,5 @@ volumes:
 
 networks:
   airflow:
+    name: airflow
     driver: bridge
